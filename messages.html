@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - Espace Candidat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- menu -->
+  <header>
+    <h1 class="logo">JobPredict</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i></a></li>
+        <li><a href="profil.html"><i class="fas fa-user"></i></a></li>
+        <li><a href="messages.html" class="active"><i class="fas fa-envelope"></i></a></li>
+        <li><a href="predire.html"><i class="fas fa-chart-line"></i></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Contenu principal -->
+  <main class="messages-page">
+    <div class="chat-container">
+
+      <!-- exp dyal discussions  -->
+      <aside class="chat-list">
+        <h2>Discussions</h2>
+        <ul id="contact-list">
+          <li class="contact active">
+            <img src="employee-avatar II .jpg" alt="Employé">
+            <div>
+              <h4>Entreprise Alpha</h4>
+              <p>Bonjour, nous avons vu votre profil...</p>
+            </div>
+          </li>
+          <li class="contact">
+            <img src="employee-avatar.jpg" alt="Employé">
+            <div>
+              <h4>Tech Innov</h4>
+              <p>Merci pour votre candidature !</p>
+            </div>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Zone de conversation -->
+      <section class="chat-box">
+        <div class="chat-header">
+          <img src="employee-avatar II .jpg" alt="Photo Contact" id="chat-photo">
+          <h3 id="chat-name">Entreprise Alpha</h3>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+          <div class="message received">
+            Bonjour, nous avons consulté votre profil.
+          </div>
+          <div class="message sent">
+            Bonjour ! Merci beaucoup 😊
+          </div>
+        </div>
+
+        <div class="chat-input">
+          <input type="text" id="message-input" placeholder="Écrire un message...">
+          <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 SmartCV | Projet Licence ADIA</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
+

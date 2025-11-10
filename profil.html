@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil - Espace Candidat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1 class="logo">JobPredict</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i></a></li>
+        <li><a href="profil.html" class="active"><i class="fas fa-user"></i></a></li>
+        <li><a href="messages.html"><i class="fas fa-envelope"></i></a></li>
+        <li><a href="predire.html"><i class="fas fa-chart-line"></i></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="profile-page">
+    <section class="profile-card">
+
+      <!-- Pic dyal condidat -->
+      <div class="profile-photo-container">
+        <img src="https://via.placeholder.com/120" alt="Photo de profil" id="user-photo">
+        <label for="photo-input" class="btn-secondary change-photo-btn"><i class="fas fa-camera"></i></label>
+        <input type="file" id="photo-input" accept="image/*" style="display: none;">
+      </div>
+
+      <!-- Infos perso -->
+      <div class="profile-info">
+        <div class="info-row">
+          <span><i class="fas fa-user"></i> Nom & Prénom :</span>
+          <span id="user-name"></span>
+          <button id="editNameBtn" class="btn-small">Modifier</button>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-envelope"></i> Email :</span>
+          <span id="user-email"></span>
+          <button id="editEmailBtn" class="btn-small">Modifier</button>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-phone"></i> Téléphone :</span>
+          <span id="user-phone"></span>
+          <button id="editPhoneBtn" class="btn-small">Modifier</button>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-file"></i> CV :</span>
+          <span id="user-cv">Aucun CV uploadé</span>
+          <button id="addCVBtn" class="btn-small">Ajouter/Changer CV</button>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-lightbulb"></i> Hard skills :</span>
+          <span id="user-skills">Aucune compétence ajoutée</span>
+          <button id="editSkillsBtn" class="btn-small">Modifier</button>
+        </div>
+        <div class="info-row">
+          <span><i class="fas fa-briefcase"></i> Soft skills :</span>
+          <span id="user-experience">Aucune compétence ajoutée</span>
+          <button id="editExperienceBtn" class="btn-small">Modifier</button>
+        </div>
+      </div>
+
+      <!-- Formulaire d'édition -->
+      <div id="editFormContainer" class="edit-form">
+        <input type="text" id="editField" placeholder="">
+        <button id="saveFieldBtn" class="btn-small btn-save">Enregistrer</button>
+        <button id="cancelEditBtn" class="btn-small btn-cancel">Annuler</button>
+      </div>
+
+      <!-- Input caché pour CV -->
+      <input type="file" id="cvInput" accept=".pdf,.doc,.docx" style="display: none;">
+
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 SmartCV | Projet Licence ADIA</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
+
+
+

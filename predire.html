@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prédire - Espace Candidat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  
+  <header>
+    <h1 class="logo">JobPredict</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i></a></li>
+        <li><a href="profil.html"><i class="fas fa-user"></i></a></li>
+        <li><a href="messages.html"><i class="fas fa-envelope"></i></a></li>
+        <li><a href="predire.html" class="active"><i class="fas fa-chart-line"></i></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Contenu principal -->
+  <main class="predict-page">
+    <section class="predict-section">
+      <h2>Recommandation d’offres selon votre CV</h2>
+      <p>Uploadez votre CV et découvrez les offres les plus adaptées à votre profil.</p>
+
+      <!-- Formulaire Upload -->
+      <div class="upload-box">
+        <input type="file" id="cvInput" accept=".pdf,.doc,.docx">
+        <button id="predictBtn" class="btn">Analyser le CV</button>
+      </div>
+
+      <!-- Résultats prédiction apres on va lier au bd -->
+      <div class="result-section" id="resultSection" style="display: none;">
+        <h3>Résultats de la prédiction :</h3>
+        <div class="offers-container" id="predictedOffers">
+          <!-- Les offres seront générées ici  venant de server -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 SmartCV | Projet Licence ADIA</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
