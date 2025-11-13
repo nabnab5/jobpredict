@@ -1,0 +1,339 @@
+/* ---------------------------------------------------- */
+/* 0. BASE STYLES & VARIABLES */
+/* ---------------------------------------------------- */
+
+:root {
+    /* Couleurs */
+    --color-primary-blue: #007BFF;
+    --color-dark-blue: #0A1931;
+    --color-light-blue: #E8F0FE;
+    --color-accent: #FF5733; 
+    --color-white: #FFFFFF;
+    --color-text-light: #F0F4F8;
+    --color-text-dark: #333333;
+    
+    /* Dégradés */
+    --gradient-hero: linear-gradient(135deg, #0A1931 0%, #172B4D 100%);
+    --gradient-primary-btn: linear-gradient(45deg, #00C6FF, #007BFF);
+    
+    /* Espacement */
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    color: var(--color-text-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Flexbox Helpers */
+.flex-row { display: flex; }
+.justify-between { justify-content: space-between; }
+/*.justify-center { justify-content: center; }*/
+.align-center { align-items: center; }
+.text-center { text-align: center; }
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+.btn-primary {
+    background: var(--gradient-primary-btn);
+    color: var(--color-white);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+}
+.btn-secondary {
+    background-color: transparent;
+    border-color: var(--color-white);
+    color: var(--color-white);
+    margin-left: 1rem;
+}
+.btn-icon {
+    background: var(--color-white);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-primary-blue);
+    margin-left: 1rem;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* ---------------------------------------------------- */
+/* 1. NAVIGATION BAR (Opacité 10%) */
+/* ---------------------------------------------------- */
+
+.navbar {
+    padding: 1rem 0;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+.navbar.fixed-top {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+.navbar.transparent {
+    /* Fond bleu foncé (0A1931) avec une opacité de 10% */
+    background-color: rgba(10, 25, 49, 0.1); 
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--color-white);
+}
+
+/* ---------------------------------------------------- */
+/* 2. HERO SECTION */
+/* ---------------------------------------------------- */
+
+.hero-section {
+    position: relative;
+    padding: 8rem 0 6rem;
+    background: var(--gradient-hero); /* Garde le dégradé bleu foncé en arrière-plan */
+    color: var(--color-text-light);
+    overflow: hidden;
+    /* Ajustement des couleurs du texte et des boutons si nécessaire pour le contraste avec la nouvelle image */
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('BGROUND.png') no-repeat center center/cover; 
+    opacity: 1; /* A changé de 0.2 à 1 pour rendre l'image entièrement visible */
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    /* ... (le reste du contenu du hero-content) */
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+/* ---------------------------------------------------- */
+/* 3. PARTNERS SECTION */
+/* ---------------------------------------------------- */
+
+.partners-section {
+    padding: var(--spacing-lg) 0;
+    background-color: var(--color-white);
+}
+
+.partners-section h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-dark-blue);
+}
+
+.partners-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.partners-grid img {
+    max-height: 40px;
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.partners-grid img:hover {
+    opacity: 1;
+    filter: none;
+}
+
+/* ---------------------------------------------------- */
+/* 4. FEATURES SECTION */
+/* ---------------------------------------------------- */
+
+.features-section {
+    padding: var(--spacing-lg) 0;
+    background: var(--gradient-hero);
+    color: var(--color-text-light);
+}
+
+.features-section h3 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.features-grid {
+    gap: 2rem;
+}
+
+.feature-card {
+    flex: 1;
+    max-width: 30%;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #00C6FF;
+    margin-bottom: 1rem;
+}
+
+.feature-card h4 {
+    margin-bottom: 0.5rem;
+}
+
+/* ---------------------------------------------------- */
+/* FOOTER */
+/* ---------------------------------------------------- */
+
+.footer {
+    background-color: var(--color-dark-blue);
+    color: var(--color-text-light);
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+.footer-links a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    margin: 0 0.5rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--color-primary-blue);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        padding-top: 6rem;
+    }
+    .features-grid {
+        flex-direction: column;
+    }
+    .feature-card {
+        max-width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    .btn-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .btn-secondary {
+        margin-left: 0;
+    }
+    .partners-grid {
+        justify-content: center;
+    }
+}
+/* ---------------------------------------------------- */
+/* NOUVELLE SECTION : TÉMOIGNAGES (SCROLL HORIZONTAL) */
+/* ---------------------------------------------------- */
+
+.testimonials-section {
+    padding: var(--spacing-lg) 0;
+    background: linear-gradient(180deg, var(--color-light-blue) 0%, var(--color-white) 100%);
+    border-top: 1px solid #007bff05;
+}
+
+.testimonials-section h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-dark-blue);
+}
+
+/* Conteneur de Défilement Horizontal */
+.testimonials-grid {
+    display: flex; /* Maintient l'affichage en ligne */
+    overflow-x: auto; /* Permet le défilement horizontal */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; /* Aide le navigateur à s'arrêter sur chaque carte */
+    padding: 1rem 0; /* Ajoute de l'espace pour le défilement */
+    gap: 2rem;
+    
+    /* Pour cacher la barre de défilement (optionnel, pour un look plus propre) */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Cacher la barre de défilement pour Webkit (Chrome, Safari) */
+.testimonials-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.testimonial-card {
+    /* Propriétés pour le format horizontal */
+    flex-shrink: 0; /* Empêche les cartes de rétrécir */
+    width: 350px; /* Largeur fixe pour la carte dans le défilement */
+    scroll-snap-align: start; /* S'aligne au début de la carte lors du défilement */
+    
+    background-color: var(--color-white);
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid var(--color-primary-blue);
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-dark);
+}
+
+.author {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 400;
+}
+
+/* Suppression des anciennes règles de responsivité pour la grille */
+@media (max-width: 992px) {
+    /* On garde le comportement scroll horizontal même sur mobile/tablette */
+    .testimonial-card {
+        width: 80vw; /* Utilise 80% de la largeur de la fenêtre pour la rendre plus facile à lire sur petit écran */
+    }
+}
