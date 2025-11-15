@@ -1,0 +1,83 @@
+body {
+  background: #eef3ff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.profile-pic-wrapper {
+  text-align: center;
+  margin-top: -70px;
+}
+
+.profile-pic {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 6px solid #e0e7ff;
+  object-fit: cover;
+}
+
+.edit-photo-btn {
+  position: relative;
+  top: -40px;
+  left: 95px;
+  background: #5865f2;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.info-row {
+  background: #f8f9ff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-edit {
+  background: #5865f2;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.stats-box {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.stat-number {
+  font-size: 26px;
+  font-weight: bold;
+  color: #4456ff;
+}
+
+.job-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.job-status {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: white;
+}
+
+.active { background: #28a745; }
+.expired { background: #dc3545; }
