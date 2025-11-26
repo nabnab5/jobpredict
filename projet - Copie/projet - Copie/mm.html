@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Recruteur - JobPredicts</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0d41e1;
+            --primary-light: #eef2ff;
+            --secondary: #003483;
+            --success: #0f9d58;
+            --warning: #f4b400;
+            --danger: #d93025;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #5b6b8b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6ff;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+        
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+        }
+        
+        .sidebar-menu li a i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s;
+            min-height: 100vh;
+        }
+        
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 15px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 400px;
+        }
+        
+        .search-bar input {
+            padding: 10px 15px 10px 40px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: 100%;
+            background: #f9f9f9;
+            transition: all 0.3s;
+        }
+        
+        .search-bar input:focus {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 65, 225, 0.1);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--gray);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Content Area */
+        .content-area {
+            padding: 25px;
+        }
+        
+        .page-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--secondary);
+        }
+        
+        .stat-card p {
+            color: var(--gray);
+            margin: 0;
+        }
+        
+        .stat-card i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .quick-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        /* Cards Section */
+        .section-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .job-offers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+            margin-right: 20px;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .job-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .job-info h5 {
+            margin-bottom: 5px;
+        }
+        
+        .job-info p {
+            color: var(--gray);
+            margin: 0;
+        }
+        
+        .company-name {
+            font-weight: 500;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+        
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: rgba(15, 157, 88, 0.1);
+            color: var(--success);
+        }
+        
+        .status-expired {
+            background: rgba(217, 48, 37, 0.1);
+            color: var(--danger);
+        }
+        
+        .status-new {
+            background: rgba(15, 157, 88, 0.1);
+            color: var(--success);
+        }
+        
+        .status-progress {
+            background: rgba(244, 180, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        /* Candidats Section - MODIFIÉ POUR AFFICHAGE VERTICAL */
+        .candidates-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .candidate-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .candidate-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .candidate-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .candidate-info {
+            flex: 1;
+        }
+        
+        .candidate-info h5 {
+            margin-bottom: 5px;
+            font-size: 1.25rem;
+        }
+        
+        .candidate-info p {
+            color: var(--gray);
+            margin: 0;
+        }
+        
+        .candidate-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 2;
+        }
+        
+        .candidate-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 0;
+        }
+        
+        .skill-tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .candidate-description {
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        .candidate-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+            justify-content: space-between;
+            min-width: 200px;
+        }
+        
+        .candidate-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .favorite-btn {
+            background: none;
+            border: none;
+            color: #ddd;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 5px;
+        }
+        
+        .favorite-btn.active {
+            color: var(--warning);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Messages Section */
+        .messages-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .conversations-list {
+            flex: 0 0 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .conversation-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .conversation-item:hover, .conversation-item.active {
+            background: var(--primary-light);
+        }
+        
+        .conversation-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .conversation-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .conversation-preview {
+            color: var(--gray);
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .conversation-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .message-area {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .message-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .message-received {
+            background: #f0f0f0;
+            align-self: flex-start;
+        }
+        
+        .message-sent {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .message-input {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .message-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        /* Statistics Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .chart-placeholder {
+            height: 300px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+        
+        .stats-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stats-card h5 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .stats-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .stats-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .stats-list li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .search-bar {
+                width: 300px;
+            }
+            
+            .messages-container {
+                flex-direction: column;
+            }
+            
+            .conversations-list {
+                flex: 1;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .candidate-card {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .candidate-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .candidate-actions {
+                align-items: center;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar {
+                width: 200px;
+            }
+            
+            .job-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .company-logo {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .top-bar {
+                padding: 15px;
+            }
+            
+            .content-area {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                justify-content: center;
+            }
+            
+            .candidate-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .action-buttons {
+                justify-content: space-between;
+            }
+        }
+        
+        /* Toggle Button for Mobile */
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+        
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Modal Styles */
+        .modal-header {
+            background: var(--primary-light);
+            border-bottom: 1px solid var(--primary);
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+        
+        /* Candidate Search Section */
+        .candidate-search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        
+        .search-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        
+        .search-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Candidate Profile Modal */
+        .candidate-profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
+            border: 4px solid var(--primary-light);
+        }
+        
+        .profile-section {
+            margin-bottom: 25px;
+        }
+        
+        .profile-section-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .profile-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .profile-info-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .profile-info-value {
+            font-weight: 500;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-light);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        
+        .timeline-date {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-subtitle {
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">JP</div>
+            <h4 class="mb-0">JobPredicts</h4>
+        </div>
+        
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="#" class="active" data-tab="dashboard"><i class="bi bi-speedometer2"></i> Tableau de bord</a></li>
+                <li><a href="#" data-tab="offres"><i class="bi bi-briefcase"></i> Offres d'emploi</a></li>
+                <li><a href="#" data-tab="candidats"><i class="bi bi-people"></i> Candidats</a></li>
+                <li><a href="#" data-tab="messages"><i class="bi bi-envelope"></i> Messages</a></li>
+                <li><a href="#" data-tab="statistiques"><i class="bi bi-bar-chart"></i> Statistiques</a></li>
+                <li><a href="#"><i class="bi bi-gear"></i> Paramètres</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+            
+            <div class="search-bar">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Rechercher candidats, offres...">
+            </div>
+            
+            <div class="top-bar-actions">
+                <div class="notification-icon">
+                    <i class="bi bi-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-profile dropdown">
+                    <img src="https://randomuser.me/api/portraits/men/41.jpg" class="user-avatar" alt="Profile" data-bs-toggle="dropdown">
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#"><i class="bi bi-person"></i> Mon profil</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <h2 class="page-title">Tableau de bord Recruteur</h2>
+                
+                <!-- Statistics Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <i class="bi bi-briefcase"></i>
+                        <h3>12</h3>
+                        <p>Offres publiées</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <i class="bi bi-people"></i>
+                        <h3>350</h3>
+                        <p>Candidatures reçues</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <i class="bi bi-eye"></i>
+                        <h3>3</h3>
+                        <p>Offres actives</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <i class="bi bi-graph-up"></i>
+                        <h3>95%</h3>
+                        <p>Taux de réponse</p>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="btn btn-primary quick-btn" data-bs-toggle="modal" data-bs-target="#publishOfferModal">
+                        <i class="bi bi-plus-circle"></i> Publier une offre
+                    </button>
+                </div>
+                
+                <!-- All Job Offers -->
+                <h4 class="section-title">
+                    <i class="bi bi-pin-angle"></i> Toutes les offres publiées
+                </h4>
+                
+                <div class="job-offers-list">
+                    <!-- Offre 1 -->
+                    <div class="job-card">
+                        <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="company-logo" alt="TechSolutions">
+                        
+                        <div class="job-content">
+                            <div class="job-header">
+                                <div class="job-info">
+                                    <h5>Développeur Full Stack</h5>
+                                    <p class="text-muted mb-1">📍 Casablanca | CDI</p>
+                                    <p class="company-name">TechSolutions Inc.</p>
+                                </div>
+                                <span class="status-badge status-active">Active</span>
+                            </div>
+                            
+                            <p>Nous recherchons un développeur Full Stack expérimenté pour rejoindre notre équipe dynamique. Vous serez responsable du développement et de la maintenance de nos applications web.</p>
+                            
+                            <div class="job-footer">
+                                <div>
+                                    <small class="text-muted">Publié le 12 Jan 2025</small>
+                                    <span class="badge bg-light text-dark ms-2">35 candidatures</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offres d'emploi Tab -->
+            <div id="offres" class="tab-content">
+                <h2 class="page-title">Gestion des offres d'emploi</h2>
+                
+                <div class="quick-actions">
+                    <button class="btn btn-primary quick-btn" data-bs-toggle="modal" data-bs-target="#publishOfferModal">
+                        <i class="bi bi-plus-circle"></i> Publier une nouvelle offre
+                    </button>
+                    <button class="btn btn-outline-primary quick-btn" id="toggleFilters">
+                        <i class="bi bi-funnel"></i> Filtrer les offres
+                    </button>
+                </div>
+                
+                <!-- Contenu des offres d'emploi -->
+            </div>
+            
+            <!-- Candidats Tab -->
+            <div id="candidats" class="tab-content">
+                <h2 class="page-title">Gestion des candidats</h2>
+                
+                <div class="quick-actions">
+                    <button class="btn btn-primary quick-btn" id="toggleSearch">
+                        <i class="bi bi-search"></i> Rechercher un candidat
+                    </button>
+                    <button class="btn btn-outline-primary quick-btn" id="toggleCandidateFilters">
+                        <i class="bi bi-funnel"></i> Filtrer
+                    </button>
+                </div>
+                
+                <!-- Recherche de candidats -->
+                <div class="candidate-search-section" id="candidateSearchSection" style="display: none;">
+                    <h5 class="form-section-title"><i class="bi bi-search"></i> Recherche avancée</h5>
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label class="form-label">Nom ou compétence</label>
+                            <input type="text" class="form-control" id="searchName" placeholder="Nom, prénom ou compétence...">
+                        </div>
+                        <div class="search-group">
+                            <label class="form-label">Poste recherché</label>
+                            <input type="text" class="form-control" id="searchPosition" placeholder="Ex: Développeur Full Stack">
+                        </div>
+                        <div class="search-group">
+                            <label class="form-label">Niveau d'expérience</label>
+                            <select class="form-select" id="searchExperience">
+                                <option value="">Tous les niveaux</option>
+                                <option value="Débutant">Débutant (0-2 ans)</option>
+                                <option value="Intermédiaire">Intermédiaire (2-5 ans)</option>
+                                <option value="Confirmé">Confirmé (5-10 ans)</option>
+                                <option value="Expert">Expert (+10 ans)</option>
+                            </select>
+                        </div>
+                        <div class="search-actions">
+                            <button class="btn btn-primary" id="applySearch">Rechercher</button>
+                            <button class="btn btn-outline-secondary" id="resetSearch">Réinitialiser</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filtres candidats -->
+                <div class="filter-section" id="candidateFilterSection" style="display: none;">
+                    <h5 class="form-section-title"><i class="bi bi-funnel"></i> Filtres candidats</h5>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="form-label">Statut</label>
+                            <select class="form-select" id="filterCandidateStatus">
+                                <option value="">Tous les statuts</option>
+                                <option value="nouveau">Nouveaux</option>
+                                <option value="contacté">Contactés</option>
+                                <option value="entretien">En entretien</option>
+                                <option value="retenu">Retenus</option>
+                                <option value="rejeté">Rejetés</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="form-label">Offre postulée</label>
+                            <select class="form-select" id="filterAppliedOffer">
+                                <option value="">Toutes les offres</option>
+                                <option value="Développeur Full Stack">Développeur Full Stack</option>
+                                <option value="Data Scientist">Data Scientist</option>
+                                <option value="Designer UI/UX">Designer UI/UX</option>
+                                <option value="Ingénieur DevOps">Ingénieur DevOps</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="form-label">Date de candidature</label>
+                            <select class="form-select" id="filterApplicationDate">
+                                <option value="">Toutes les dates</option>
+                                <option value="today">Aujourd'hui</option>
+                                <option value="week">Cette semaine</option>
+                                <option value="month">Ce mois</option>
+                                <option value="older">Plus ancien</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn-primary" id="applyCandidateFilters">Appliquer</button>
+                            <button class="btn btn-outline-secondary" id="resetCandidateFilters">Réinitialiser</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-navigation">
+                    <button class="tab-btn active" data-tab="candidats-tous">Tous les candidats</button>
+                    <button class="tab-btn" data-tab="candidats-nouveaux">Nouveaux</button>
+                    <button class="tab-btn" data-tab="candidats-favoris">Favoris</button>
+                </div>
+                
+                <div id="candidats-tous" class="tab-content active">
+                    <h4 class="section-title">
+                        <i class="bi bi-people"></i> Tous les candidats (350)
+                    </h4>
+                    
+                    <div class="candidates-container">
+                        <!-- Candidat 1 -->
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="candidate-avatar" alt="Sarah Benali">
+                                <div class="candidate-info">
+                                    <h5>Sarah Benali</h5>
+                                    <p>Développeuse Full Stack</p>
+                                    <small class="text-muted">Postulé le 15 Jan 2025</small>
+                                </div>
+                            </div>
+                            
+                            <div class="candidate-details">
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">JavaScript</span>
+                                    <span class="skill-tag">React</span>
+                                    <span class="skill-tag">Node.js</span>
+                                    <span class="skill-tag">MongoDB</span>
+                                    <span class="skill-tag">TypeScript</span>
+                                    <span class="skill-tag">Express.js</span>
+                                </div>
+                                
+                                <p class="candidate-description">Expérience de 4 ans dans le développement web. Recherche un poste stimulant dans une entreprise innovante. Spécialisée dans la création d'applications web modernes et performantes.</p>
+                            </div>
+                            
+                            <div class="candidate-actions">
+                                <div class="candidate-meta">
+                                    <span class="badge bg-primary">Développeur Full Stack</span>
+                                    <button class="favorite-btn" data-candidate="1"><i class="bi bi-star"></i></button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary view-profile-btn" data-candidate="1">Voir profil</button>
+                                    <button class="btn btn-sm btn-outline-success contact-btn" data-candidate="1">Contacter</button>
+                                    <button class="btn btn-sm btn-outline-info download-cv-btn" data-candidate="1">Télécharger CV</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Candidat 2 -->
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <img src="https://randomuser.me/api/portraits/men/54.jpg" class="candidate-avatar" alt="Karim El Amrani">
+                                <div class="candidate-info">
+                                    <h5>Karim El Amrani</h5>
+                                    <p>Data Scientist</p>
+                                    <small class="text-muted">Postulé le 14 Jan 2025</small>
+                                </div>
+                            </div>
+                            
+                            <div class="candidate-details">
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">Python</span>
+                                    <span class="skill-tag">Machine Learning</span>
+                                    <span class="skill-tag">TensorFlow</span>
+                                    <span class="skill-tag">SQL</span>
+                                    <span class="skill-tag">Data Analysis</span>
+                                    <span class="skill-tag">Deep Learning</span>
+                                </div>
+                                
+                                <p class="candidate-description">Doctorat en Intelligence Artificielle. 5 ans d'expérience dans l'analyse de données et la modélisation prédictive. Passionné par l'application de l'IA pour résoudre des problèmes complexes.</p>
+                            </div>
+                            
+                            <div class="candidate-actions">
+                                <div class="candidate-meta">
+                                    <span class="badge bg-success">Data Scientist</span>
+                                    <button class="favorite-btn" data-candidate="2"><i class="bi bi-star"></i></button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary view-profile-btn" data-candidate="2">Voir profil</button>
+                                    <button class="btn btn-sm btn-outline-success contact-btn" data-candidate="2">Contacter</button>
+                                    <button class="btn btn-sm btn-outline-info download-cv-btn" data-candidate="2">Télécharger CV</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Candidat 3 -->
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="candidate-avatar" alt="Leila Chraibi">
+                                <div class="candidate-info">
+                                    <h5>Leila Chraibi</h5>
+                                    <p>Designer UI/UX</p>
+                                    <small class="text-muted">Postulé le 13 Jan 2025</small>
+                                </div>
+                            </div>
+                            
+                            <div class="candidate-details">
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">Figma</span>
+                                    <span class="skill-tag">Adobe XD</span>
+                                    <span class="skill-tag">Prototypage</span>
+                                    <span class="skill-tag">Design Thinking</span>
+                                    <span class="skill-tag">User Research</span>
+                                    <span class="skill-tag">Wireframing</span>
+                                </div>
+                                
+                                <p class="candidate-description">Designer créative avec 3 ans d'expérience. Passionnée par la création d'interfaces utilisateur intuitives et esthétiques. Expérience en conception centrée sur l'utilisateur.</p>
+                            </div>
+                            
+                            <div class="candidate-actions">
+                                <div class="candidate-meta">
+                                    <span class="badge bg-warning">Designer UI/UX</span>
+                                    <button class="favorite-btn active" data-candidate="3"><i class="bi bi-star-fill"></i></button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary view-profile-btn" data-candidate="3">Voir profil</button>
+                                    <button class="btn btn-sm btn-outline-success contact-btn" data-candidate="3">Contacter</button>
+                                    <button class="btn btn-sm btn-outline-info download-cv-btn" data-candidate="3">Télécharger CV</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Candidat 4 -->
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="candidate-avatar" alt="Youssef Alaoui">
+                                <div class="candidate-info">
+                                    <h5>Youssef Alaoui</h5>
+                                    <p>Développeur Frontend</p>
+                                    <small class="text-muted">Postulé le 12 Jan 2025</small>
+                                </div>
+                            </div>
+                            
+                            <div class="candidate-details">
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">React</span>
+                                    <span class="skill-tag">Vue.js</span>
+                                    <span class="skill-tag">CSS</span>
+                                    <span class="skill-tag">TypeScript</span>
+                                    <span class="skill-tag">SASS</span>
+                                    <span class="skill-tag">Responsive Design</span>
+                                </div>
+                                
+                                <p class="candidate-description">Jeune développeur passionné par les nouvelles technologies. À la recherche d'un premier emploi stimulant. Fort intérêt pour les interfaces utilisateur modernes et accessibles.</p>
+                            </div>
+                            
+                            <div class="candidate-actions">
+                                <div class="candidate-meta">
+                                    <span class="badge bg-info">Développeur Frontend</span>
+                                    <button class="favorite-btn" data-candidate="4"><i class="bi bi-star"></i></button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary view-profile-btn" data-candidate="4">Voir profil</button>
+                                    <button class="btn btn-sm btn-outline-success contact-btn" data-candidate="4">Contacter</button>
+                                    <button class="btn btn-sm btn-outline-info download-cv-btn" data-candidate="4">Télécharger CV</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="candidats-nouveaux" class="tab-content">
+                    <h4 class="section-title">
+                        <i class="bi bi-person-plus"></i> Nouveaux candidats (12)
+                    </h4>
+                    
+                    <div class="candidates-container">
+                        <!-- Candidat 5 -->
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <img src="https://randomuser.me/api/portraits/women/23.jpg" class="candidate-avatar" alt="Amina Touil">
+                                <div class="candidate-info">
+                                    <h5>Amina Touil</h5>
+                                    <p>Data Analyst</p>
+                                    <small class="text-muted">Postulé le 20 Jan 2025</small>
+                                </div>
+                            </div>
+                            
+                            <div class="candidate-details">
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">Python</span>
+                                    <span class="skill-tag">SQL</span>
+                                    <span class="skill-tag">Tableau</span>
+                                    <span class="skill-tag">Excel</span>
+                                    <span class="skill-tag">Power BI</span>
+                                    <span class="skill-tag">Data Visualization</span>
+                                </div>
+                                
+                                <p class="candidate-description">Diplômée en statistiques. Recherche un poste de data analyst pour mettre en pratique mes compétences en analyse de données. Forte capacité d'analyse et de synthèse.</p>
+                            </div>
+                            
+                            <div class="candidate-actions">
+                                <div class="candidate-meta">
+                                    <span class="badge bg-success">Data Analyst</span>
+                                    <span class="badge bg-success ms-1">Nouveau</span>
+                                    <button class="favorite-btn" data-candidate="5"><i class="bi bi-star"></i></button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary view-profile-btn" data-candidate="5">Voir profil</button>
+                                    <button class="btn btn-sm btn-outline-success contact-btn" data-candidate="5">Contacter</button>
+                                    <button class="btn btn-sm btn-outline-info download-cv-btn" data-candidate="5">Télécharger CV</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="candidats-favoris" class="tab-content">
+                    <h4 class="section-title">
+                        <i class="bi bi-star"></i> Candidats favoris (5)
+                    </h4>
+                    
+                    <div class="candidates-container">
+                        <!-- Candidat 3 (favori) -->
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="candidate-avatar" alt="Leila Chraibi">
+                                <div class="candidate-info">
+                                    <h5>Leila Chraibi</h5>
+                                    <p>Designer UI/UX</p>
+                                    <small class="text-muted">Postulé le 13 Jan 2025</small>
+                                </div>
+                            </div>
+                            
+                            <div class="candidate-details">
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">Figma</span>
+                                    <span class="skill-tag">Adobe XD</span>
+                                    <span class="skill-tag">Prototypage</span>
+                                    <span class="skill-tag">Design Thinking</span>
+                                    <span class="skill-tag">User Research</span>
+                                    <span class="skill-tag">Wireframing</span>
+                                </div>
+                                
+                                <p class="candidate-description">Designer créative avec 3 ans d'expérience. Passionnée par la création d'interfaces utilisateur intuitives et esthétiques. Expérience en conception centrée sur l'utilisateur.</p>
+                            </div>
+                            
+                            <div class="candidate-actions">
+                                <div class="candidate-meta">
+                                    <span class="badge bg-warning">Designer UI/UX</span>
+                                    <span class="badge bg-warning ms-1">Favori</span>
+                                    <button class="favorite-btn active" data-candidate="3"><i class="bi bi-star-fill"></i></button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary view-profile-btn" data-candidate="3">Voir profil</button>
+                                    <button class="btn btn-sm btn-outline-success contact-btn" data-candidate="3">Contacter</button>
+                                    <button class="btn btn-sm btn-outline-info download-cv-btn" data-candidate="3">Télécharger CV</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Messages Tab -->
+            <div id="messages" class="tab-content">
+                <h2 class="page-title">Messagerie</h2>
+                
+                <div class="messages-container">
+                    <div class="conversations-list">
+                        <!-- Conversation 1 -->
+                        <div class="conversation-item active">
+                            <div class="conversation-header">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="conversation-avatar" alt="Sarah Benali">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">Sarah Benali</h6>
+                                    <small class="conversation-time">Il y a 2 min</small>
+                                </div>
+                            </div>
+                            <p class="conversation-preview">Bonjour, je suis intéressée par le poste de développeur Full Stack. Pouvez-vous me donner plus de détails sur les technologies utilisées ?</p>
+                        </div>
+                    </div>
+                    
+                    <div class="message-area">
+                        <div class="message-header">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" class="conversation-avatar" alt="Sarah Benali">
+                            <div>
+                                <h5 class="mb-0">Sarah Benali</h5>
+                                <small class="text-muted">Développeuse Full Stack</small>
+                            </div>
+                        </div>
+                        
+                        <div class="message-content">
+                            <div class="message-bubble message-received">
+                                <p>Bonjour, je suis intéressée par le poste de développeur Full Stack. Pouvez-vous me donner plus de détails sur les technologies utilisées ?</p>
+                                <small class="text-muted">10:32</small>
+                            </div>
+                            
+                            <div class="message-bubble message-sent">
+                                <p>Bonjour Sarah, merci pour votre intérêt. Nous utilisons principalement React pour le frontend et Node.js pour le backend. La base de données est MongoDB.</p>
+                                <small class="text-white-50">10:35</small>
+                            </div>
+                        </div>
+                        
+                        <div class="message-input">
+                            <input type="text" placeholder="Tapez votre message...">
+                            <button class="btn btn-primary">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Statistiques Tab -->
+            <div id="statistiques" class="tab-content">
+                <h2 class="page-title">Statistiques et analyses</h2>
+                
+                <div class="stats-grid">
+                    <div class="chart-container">
+                        <h5>Performances des offres d'emploi</h5>
+                        <div class="chart-placeholder">
+                            <i class="bi bi-bar-chart me-2"></i> Graphique des performances des offres
+                        </div>
+                    </div>
+                    
+                    <div class="stats-details">
+                        <div class="stats-card">
+                            <h5>Statistiques rapides</h5>
+                            <ul class="stats-list">
+                                <li>
+                                    <span>Taux de réponse moyen</span>
+                                    <span class="fw-bold text-success">95%</span>
+                                </li>
+                                <li>
+                                    <span>Temps moyen de réponse</span>
+                                    <span class="fw-bold">2.3 jours</span>
+                                </li>
+                                <li>
+                                    <span>Candidats par offre</span>
+                                    <span class="fw-bold">29.2</span>
+                                </li>
+                                <li>
+                                    <span>Taux de conversion</span>
+                                    <span class="fw-bold text-success">12.5%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Profil Candidat -->
+    <div class="modal fade" id="candidateProfileModal" tabindex="-1" aria-labelledby="candidateProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="candidateProfileModalLabel">Profil du candidat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="" class="candidate-profile-img" id="modalCandidateAvatar" alt="Photo du candidat">
+                        <h3 id="modalCandidateName">Nom du candidat</h3>
+                        <p class="text-muted" id="modalCandidateTitle">Poste recherché</p>
+                        <div class="d-flex justify-content-center gap-2 mt-2">
+                            <button class="btn btn-sm btn-outline-primary contact-btn-modal">Contacter</button>
+                            <button class="btn btn-sm btn-outline-info download-cv-btn-modal">Télécharger CV</button>
+                            <button class="btn btn-sm btn-outline-warning favorite-btn-modal">
+                                <i class="bi bi-star"></i> Ajouter aux favoris
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h5 class="profile-section-title"><i class="bi bi-info-circle"></i> Informations personnelles</h5>
+                        <div class="profile-info-grid">
+                            <div class="profile-info-item">
+                                <span class="profile-info-label">Email</span>
+                                <span class="profile-info-value" id="modalCandidateEmail">email@example.com</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <span class="profile-info-label">Téléphone</span>
+                                <span class="profile-info-value" id="modalCandidatePhone">+212 6 00 00 00 00</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <span class="profile-info-label">Ville</span>
+                                <span class="profile-info-value" id="modalCandidateCity">Casablanca</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <span class="profile-info-label">Expérience</span>
+                                <span class="profile-info-value" id="modalCandidateExperience">4 ans</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <span class="profile-info-label">Disponibilité</span>
+                                <span class="profile-info-value" id="modalCandidateAvailability">Immédiate</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <span class="profile-info-label">Salaire attendu</span>
+                                <span class="profile-info-value" id="modalCandidateSalary">15 000 - 18 000 MAD</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h5 class="profile-section-title"><i class="bi bi-lightning-charge"></i> Compétences</h5>
+                        <div class="candidate-skills" id="modalCandidateSkills">
+                            <!-- Compétences seront ajoutées dynamiquement -->
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h5 class="profile-section-title"><i class="bi bi-file-text"></i> À propos</h5>
+                        <p id="modalCandidateAbout">Description du candidat...</p>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h5 class="profile-section-title"><i class="bi bi-briefcase"></i> Expérience professionnelle</h5>
+                        <div class="timeline" id="modalCandidateExperienceList">
+                            <!-- Expériences seront ajoutées dynamiquement -->
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h5 class="profile-section-title"><i class="bi bi-mortarboard"></i> Formation</h5>
+                        <div class="timeline" id="modalCandidateEducationList">
+                            <!-- Formations seront ajoutées dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary contact-btn-modal">Contacter le candidat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Données des candidats
+        const candidatesData = {
+            1: {
+                name: "Sarah Benali",
+                title: "Développeuse Full Stack",
+                avatar: "https://randomuser.me/api/portraits/women/32.jpg",
+                email: "sarah.benali@example.com",
+                phone: "+212 6 12 34 56 78",
+                city: "Casablanca",
+                experience: "4 ans",
+                availability: "Immédiate",
+                salary: "15 000 - 18 000 MAD",
+                skills: ["JavaScript", "React", "Node.js", "MongoDB", "TypeScript", "Express.js"],
+                about: "Expérience de 4 ans dans le développement web. Recherche un poste stimulant dans une entreprise innovante. Spécialisée dans la création d'applications web modernes et performantes.",
+                experienceList: [
+                    {
+                        date: "2021 - Présent",
+                        title: "Développeuse Full Stack",
+                        company: "TechSolutions Inc.",
+                        description: "Développement et maintenance d'applications web avec React et Node.js"
+                    },
+                    {
+                        date: "2019 - 2021",
+                        title: "Développeuse Frontend",
+                        company: "WebDev Agency",
+                        description: "Création d'interfaces utilisateur avec React et intégration avec APIs"
+                    }
+                ],
+                educationList: [
+                    {
+                        date: "2015 - 2019",
+                        title: "Master en Informatique",
+                        school: "Université Hassan II, Casablanca",
+                        description: "Spécialisation en développement web et bases de données"
+                    }
+                ],
+                cvUrl: "#",
+                isFavorite: false
+            },
+            2: {
+                name: "Karim El Amrani",
+                title: "Data Scientist",
+                avatar: "https://randomuser.me/api/portraits/men/54.jpg",
+                email: "karim.elamrani@example.com",
+                phone: "+212 6 23 45 67 89",
+                city: "Rabat",
+                experience: "5 ans",
+                availability: "1 mois",
+                salary: "20 000 - 25 000 MAD",
+                skills: ["Python", "Machine Learning", "TensorFlow", "SQL", "Data Analysis", "Deep Learning"],
+                about: "Doctorat en Intelligence Artificielle. 5 ans d'expérience dans l'analyse de données et la modélisation prédictive. Passionné par l'application de l'IA pour résoudre des problèmes complexes.",
+                experienceList: [
+                    {
+                        date: "2020 - Présent",
+                        title: "Data Scientist Senior",
+                        company: "DataTech Labs",
+                        description: "Développement de modèles prédictifs et analyse de données complexes"
+                    },
+                    {
+                        date: "2018 - 2020",
+                        title: "Data Analyst",
+                        company: "Analytics Pro",
+                        description: "Analyse de données et création de tableaux de bord pour la prise de décision"
+                    }
+                ],
+                educationList: [
+                    {
+                        date: "2015 - 2018",
+                        title: "Doctorat en Intelligence Artificielle",
+                        school: "Université Mohammed V, Rabat",
+                        description: "Recherche sur les réseaux neuronaux et l'apprentissage profond"
+                    },
+                    {
+                        date: "2013 - 2015",
+                        title: "Master en Data Science",
+                        school: "École Nationale d'Informatique",
+                        description: "Spécialisation en analyse de données et machine learning"
+                    }
+                ],
+                cvUrl: "#",
+                isFavorite: false
+            },
+            3: {
+                name: "Leila Chraibi",
+                title: "Designer UI/UX",
+                avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+                email: "leila.chraibi@example.com",
+                phone: "+212 6 34 56 78 90",
+                city: "Marrakech",
+                experience: "3 ans",
+                availability: "Immédiate",
+                salary: "12 000 - 15 000 MAD",
+                skills: ["Figma", "Adobe XD", "Prototypage", "Design Thinking", "User Research", "Wireframing"],
+                about: "Designer créative avec 3 ans d'expérience. Passionnée par la création d'interfaces utilisateur intuitives et esthétiques. Expérience en conception centrée sur l'utilisateur.",
+                experienceList: [
+                    {
+                        date: "2020 - Présent",
+                        title: "Designer UI/UX",
+                        company: "Creative Design Studio",
+                        description: "Conception d'interfaces utilisateur pour applications web et mobiles"
+                    },
+                    {
+                        date: "2019 - 2020",
+                        title: "Designer Graphique",
+                        company: "Branding Agency",
+                        description: "Création d'identités visuelles et de supports de communication"
+                    }
+                ],
+                educationList: [
+                    {
+                        date: "2016 - 2019",
+                        title: "Licence en Design Graphique",
+                        school: "École des Beaux-Arts, Marrakech",
+                        description: "Spécialisation en design d'interface et expérience utilisateur"
+                    }
+                ],
+                cvUrl: "#",
+                isFavorite: true
+            },
+            4: {
+                name: "Youssef Alaoui",
+                title: "Développeur Frontend",
+                avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                email: "youssef.alaoui@example.com",
+                phone: "+212 6 45 67 89 01",
+                city: "Tanger",
+                experience: "1 an",
+                availability: "Immédiate",
+                salary: "8 000 - 10 000 MAD",
+                skills: ["React", "Vue.js", "CSS", "TypeScript", "SASS", "Responsive Design"],
+                about: "Jeune développeur passionné par les nouvelles technologies. À la recherche d'un premier emploi stimulant. Fort intérêt pour les interfaces utilisateur modernes et accessibles.",
+                experienceList: [
+                    {
+                        date: "2022 - 2023",
+                        title: "Stagiaire Développeur Frontend",
+                        company: "WebStart Inc.",
+                        description: "Développement de composants React et intégration d'APIs"
+                    }
+                ],
+                educationList: [
+                    {
+                        date: "2019 - 2022",
+                        title: "Licence en Développement Web",
+                        school: "Institut Supérieur d'Informatique, Tanger",
+                        description: "Formation en développement web frontend et backend"
+                    }
+                ],
+                cvUrl: "#",
+                isFavorite: false
+            },
+            5: {
+                name: "Amina Touil",
+                title: "Data Analyst",
+                avatar: "https://randomuser.me/api/portraits/women/23.jpg",
+                email: "amina.touil@example.com",
+                phone: "+212 6 56 78 90 12",
+                city: "Fès",
+                experience: "2 ans",
+                availability: "2 semaines",
+                salary: "10 000 - 12 000 MAD",
+                skills: ["Python", "SQL", "Tableau", "Excel", "Power BI", "Data Visualization"],
+                about: "Diplômée en statistiques. Recherche un poste de data analyst pour mettre en pratique mes compétences en analyse de données. Forte capacité d'analyse et de synthèse.",
+                experienceList: [
+                    {
+                        date: "2021 - 2023",
+                        title: "Data Analyst Junior",
+                        company: "Analytics Solutions",
+                        description: "Analyse de données clients et création de rapports pour la direction"
+                    }
+                ],
+                educationList: [
+                    {
+                        date: "2018 - 2021",
+                        title: "Licence en Statistiques",
+                        school: "Université Sidi Mohamed Ben Abdellah, Fès",
+                        description: "Formation en analyse statistique et modélisation de données"
+                    }
+                ],
+                cvUrl: "#",
+                isFavorite: false
+            }
+        };
+
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            if (window.innerWidth <= 992 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // Add animation to stat cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(card);
+        });
+        
+        // Tab navigation functionality
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active state in sidebar
+                document.querySelectorAll('.sidebar-menu a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show corresponding tab
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Sub-tab navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.tab-navigation');
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active state
+                parent.querySelectorAll('.tab-btn').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show corresponding tab content
+                const tabContents = parent.parentElement.querySelectorAll('.tab-content');
+                tabContents.forEach(tab => {
+                    if (tab.id.startsWith(tabId.split('-')[0])) {
+                        tab.classList.remove('active');
+                    }
+                });
+                
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Conversation selection
+        document.querySelectorAll('.conversation-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.conversation-item').forEach(conv => {
+                    conv.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        
+        // Toggle candidate search section
+        document.getElementById('toggleSearch').addEventListener('click', function() {
+            const searchSection = document.getElementById('candidateSearchSection');
+            if (searchSection.style.display === 'none' || searchSection.style.display === '') {
+                searchSection.style.display = 'block';
+                this.innerHTML = '<i class="bi bi-search"></i> Masquer la recherche';
+            } else {
+                searchSection.style.display = 'none';
+                this.innerHTML = '<i class="bi bi-search"></i> Rechercher un candidat';
+            }
+        });
+        
+        // Toggle candidate filter section
+        document.getElementById('toggleCandidateFilters').addEventListener('click', function() {
+            const filterSection = document.getElementById('candidateFilterSection');
+            if (filterSection.style.display === 'none' || filterSection.style.display === '') {
+                filterSection.style.display = 'block';
+                this.innerHTML = '<i class="bi bi-funnel-fill"></i> Masquer les filtres';
+            } else {
+                filterSection.style.display = 'none';
+                this.innerHTML = '<i class="bi bi-funnel"></i> Filtrer';
+            }
+        });
+        
+        // Apply candidate search
+        document.getElementById('applySearch').addEventListener('click', function() {
+            const name = document.getElementById('searchName').value;
+            const position = document.getElementById('searchPosition').value;
+            const experience = document.getElementById('searchExperience').value;
+            
+            // Ici vous implémenteriez la logique de recherche réelle
+            alert(`Recherche appliquée:\nNom/Compétence: ${name || 'Tous'}\nPoste: ${position || 'Tous'}\nExpérience: ${experience || 'Tous'}`);
+            
+            // Masquer la section recherche après application
+            document.getElementById('candidateSearchSection').style.display = 'none';
+            document.getElementById('toggleSearch').innerHTML = '<i class="bi bi-search"></i> Rechercher un candidat';
+        });
+        
+        // Reset candidate search
+        document.getElementById('resetSearch').addEventListener('click', function() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('searchPosition').value = '';
+            document.getElementById('searchExperience').value = '';
+        });
+        
+        // Apply candidate filters
+        document.getElementById('applyCandidateFilters').addEventListener('click', function() {
+            const status = document.getElementById('filterCandidateStatus').value;
+            const offer = document.getElementById('filterAppliedOffer').value;
+            const date = document.getElementById('filterApplicationDate').value;
+            
+            // Ici vous implémenteriez la logique de filtrage réelle
+            alert(`Filtres appliqués:\nStatut: ${status || 'Tous'}\nOffre: ${offer || 'Toutes'}\nDate: ${date || 'Toutes'}`);
+            
+            // Masquer la section filtre après application
+            document.getElementById('candidateFilterSection').style.display = 'none';
+            document.getElementById('toggleCandidateFilters').innerHTML = '<i class="bi bi-funnel"></i> Filtrer';
+        });
+        
+        // Reset candidate filters
+        document.getElementById('resetCandidateFilters').addEventListener('click', function() {
+            document.getElementById('filterCandidateStatus').value = '';
+            document.getElementById('filterAppliedOffer').value = '';
+            document.getElementById('filterApplicationDate').value = '';
+        });
+        
+        // Voir profil du candidat
+        document.querySelectorAll('.view-profile-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const candidateId = this.getAttribute('data-candidate');
+                showCandidateProfile(candidateId);
+            });
+        });
+        
+        // Contacter le candidat
+        document.querySelectorAll('.contact-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const candidateId = this.getAttribute('data-candidate');
+                contactCandidate(candidateId);
+            });
+        });
+        
+        // Télécharger CV
+        document.querySelectorAll('.download-cv-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const candidateId = this.getAttribute('data-candidate');
+                downloadCV(candidateId);
+            });
+        });
+        
+        // Favorite functionality
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const candidateId = this.getAttribute('data-candidate');
+                toggleFavorite(candidateId, this);
+            });
+        });
+        
+        // Fonction pour afficher le profil du candidat
+        function showCandidateProfile(candidateId) {
+            const candidate = candidatesData[candidateId];
+            if (!candidate) return;
+            
+            // Mettre à jour les informations dans la modal
+            document.getElementById('modalCandidateName').textContent = candidate.name;
+            document.getElementById('modalCandidateTitle').textContent = candidate.title;
+            document.getElementById('modalCandidateAvatar').src = candidate.avatar;
+            document.getElementById('modalCandidateEmail').textContent = candidate.email;
+            document.getElementById('modalCandidatePhone').textContent = candidate.phone;
+            document.getElementById('modalCandidateCity').textContent = candidate.city;
+            document.getElementById('modalCandidateExperience').textContent = candidate.experience;
+            document.getElementById('modalCandidateAvailability').textContent = candidate.availability;
+            document.getElementById('modalCandidateSalary').textContent = candidate.salary;
+            document.getElementById('modalCandidateAbout').textContent = candidate.about;
+            
+            // Mettre à jour les compétences
+            const skillsContainer = document.getElementById('modalCandidateSkills');
+            skillsContainer.innerHTML = '';
+            candidate.skills.forEach(skill => {
+                const skillTag = document.createElement('span');
+                skillTag.className = 'skill-tag';
+                skillTag.textContent = skill;
+                skillsContainer.appendChild(skillTag);
+            });
+            
+            // Mettre à jour l'expérience professionnelle
+            const experienceContainer = document.getElementById('modalCandidateExperienceList');
+            experienceContainer.innerHTML = '';
+            candidate.experienceList.forEach(exp => {
+                const expItem = document.createElement('div');
+                expItem.className = 'timeline-item';
+                expItem.innerHTML = `
+                    <div class="timeline-date">${exp.date}</div>
+                    <div class="timeline-title">${exp.title}</div>
+                    <div class="timeline-subtitle">${exp.company}</div>
+                    <p>${exp.description}</p>
+                `;
+                experienceContainer.appendChild(expItem);
+            });
+            
+            // Mettre à jour la formation
+            const educationContainer = document.getElementById('modalCandidateEducationList');
+            educationContainer.innerHTML = '';
+            candidate.educationList.forEach(edu => {
+                const eduItem = document.createElement('div');
+                eduItem.className = 'timeline-item';
+                eduItem.innerHTML = `
+                    <div class="timeline-date">${edu.date}</div>
+                    <div class="timeline-title">${edu.title}</div>
+                    <div class="timeline-subtitle">${edu.school}</div>
+                    <p>${edu.description}</p>
+                `;
+                educationContainer.appendChild(eduItem);
+            });
+            
+            // Mettre à jour le bouton favori dans la modal
+            const favoriteBtnModal = document.querySelector('.favorite-btn-modal');
+            if (candidate.isFavorite) {
+                favoriteBtnModal.innerHTML = '<i class="bi bi-star-fill"></i> Retirer des favoris';
+                favoriteBtnModal.classList.add('active');
+            } else {
+                favoriteBtnModal.innerHTML = '<i class="bi bi-star"></i> Ajouter aux favoris';
+                favoriteBtnModal.classList.remove('active');
+            }
+            
+            // Ajouter les événements pour les boutons de la modal
+            favoriteBtnModal.onclick = function() {
+                toggleFavorite(candidateId, this);
+                // Mettre à jour également le bouton dans la liste
+                const favoriteBtnInList = document.querySelector(`.favorite-btn[data-candidate="${candidateId}"]`);
+                if (favoriteBtnInList) {
+                    toggleFavorite(candidateId, favoriteBtnInList);
+                }
+            };
+            
+            document.querySelector('.contact-btn-modal').onclick = function() {
+                contactCandidate(candidateId);
+            };
+            
+            document.querySelector('.download-cv-btn-modal').onclick = function() {
+                downloadCV(candidateId);
+            };
+            
+            // Afficher la modal
+            const modal = new bootstrap.Modal(document.getElementById('candidateProfileModal'));
+            modal.show();
+        }
+        
+        // Fonction pour contacter un candidat
+        function contactCandidate(candidateId) {
+            const candidate = candidatesData[candidateId];
+            if (!candidate) return;
+            
+            // Rediriger vers l'onglet messages avec le candidat sélectionné
+            document.querySelectorAll('.sidebar-menu a').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('[data-tab="messages"]').classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById('messages').classList.add('active');
+            
+            // Ici, vous pourriez également pré-remplir le champ de message
+            // ou sélectionner automatiquement la conversation avec ce candidat
+            alert(`Redirection vers la messagerie pour contacter ${candidate.name}`);
+        }
+        
+        // Fonction pour télécharger le CV
+        function downloadCV(candidateId) {
+            const candidate = candidatesData[candidateId];
+            if (!candidate) return;
+            
+            // Simuler le téléchargement du CV
+            alert(`Téléchargement du CV de ${candidate.name}`);
+            // En réalité, vous redirigeriez vers l'URL du CV
+            // window.location.href = candidate.cvUrl;
+        }
+        
+        // Fonction pour ajouter/retirer des favoris
+        function toggleFavorite(candidateId, buttonElement) {
+            const candidate = candidatesData[candidateId];
+            if (!candidate) return;
+            
+            candidate.isFavorite = !candidate.isFavorite;
+            
+            if (candidate.isFavorite) {
+                buttonElement.classList.add('active');
+                buttonElement.innerHTML = '<i class="bi bi-star-fill"></i>';
+                if (buttonElement.classList.contains('favorite-btn-modal')) {
+                    buttonElement.innerHTML = '<i class="bi bi-star-fill"></i> Retirer des favoris';
+                }
+                // Ajouter aux favoris (vous pourriez sauvegarder cela dans une base de données)
+                console.log(`Candidat ${candidateId} ajouté aux favoris`);
+            } else {
+                buttonElement.classList.remove('active');
+                buttonElement.innerHTML = '<i class="bi bi-star"></i>';
+                if (buttonElement.classList.contains('favorite-btn-modal')) {
+                    buttonElement.innerHTML = '<i class="bi bi-star"></i> Ajouter aux favoris';
+                }
+                // Retirer des favoris
+                console.log(`Candidat ${candidateId} retiré des favoris`);
+            }
+            
+            // Mettre à jour l'affichage des onglets si nécessaire
+            updateFavoritesTab();
+        }
+        
+        // Fonction pour mettre à jour l'onglet des favoris
+        function updateFavoritesTab() {
+            // Cette fonction pourrait être utilisée pour mettre à jour dynamiquement
+            // la liste des favoris sans recharger la page
+            console.log("Mise à jour de l'onglet des favoris");
+        }
+    </script>
+</body>
+</html>
